@@ -1,0 +1,43 @@
+# this is a comment
+stages:
+  data_ingestion:
+    cmd: python mlops_new/data/data_ingestion.py
+    deps:
+    - mlops_new/data/data_ingestion.py
+    params:
+    - data_ingestion.test_size
+    outs:
+    - data/raw
+  data_preprocessing:
+    cmd: python mlops_new/data/data_preprocessing.py
+    deps:
+    - data/raw
+    - mlops_new/data/data_preprocessing.py
+    outs:
+    - data/interim
+  feature_engineering:
+    cmd: python mlops_new/features/feature_engineering.py
+    deps:
+    - data/interim
+    - mlops_new/features/feature_engineering.py
+    params:
+    - feature_engineering.max_features
+    outs:
+    - data/processed
+  model_building:
+    cmd: python mlops_new/modeling/train.py
+    deps:
+    - data/processed
+    - mlops_new/modeling/train.py
+    params:
+    - model_building.n_estimators
+    - model_building.learning_rate
+    outs:
+    - models/model.joblib
+  model_evaluation:
+    cmd: python mlops_new/modeling/model_evaluation.py
+    deps:
+    - models/model.joblib
+    - mlops_new/modeling/model_evaluation.py
+    metrics:
+    - reports/metrics.json

@@ -1,0 +1,57 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "mlops_new"
+version = "0.0.1"
+description = "The path towards e2e machine learning pipeline"
+authors = [
+  { name = "sourav_dhar" },
+]
+license = { file = "LICENSE" }
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+]
+dependencies = [
+    "black",
+    "dvc>=3.65.0",
+    "flake8",
+    "isort",
+    "joblib>=1.5.3",
+    "loguru",
+    "matplotlib>=3.10.8",
+    "mkdocs",
+    "mlflow>=3.8.1",
+    "nltk>=3.9.2",
+    "numpy>=2.4.1",
+    "pandas>=2.3.3",
+    "pathlib>=1.0.1",
+    "pip",
+    "pytest",
+    "python-dotenv",
+    "scikit-learn>=1.8.0",
+    "seaborn>=0.13.2",
+    "tqdm",
+    "typer",
+]
+requires-python = "~=3.12.0"
+
+[tool.black]
+line-length = 99
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+)/
+'''
+
+[tool.isort]
+profile = "black"
+known_first_party = ["mlops_new"]
+force_sort_within_sections = true
+
+
