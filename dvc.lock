@@ -1,0 +1,94 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python mlops_new/data/data_ingestion.py
+    deps:
+    - path: mlops_new/data/data_ingestion.py
+      hash: md5
+      md5: 09725e79e52b78ae09a21d96826b6901
+      size: 3529
+    params:
+      params.yaml:
+        data_ingestion.test_size: 0.2
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: fb326d2eec197669f9638afde28356bf.dir
+      size: 827973
+      nfiles: 2
+  data_preprocessing:
+    cmd: python mlops_new/data/data_preprocessing.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: fb326d2eec197669f9638afde28356bf.dir
+      size: 827973
+      nfiles: 2
+    - path: mlops_new/data/data_preprocessing.py
+      hash: md5
+      md5: 36e61fa0c89ebd4ded60581b771928b0
+      size: 3992
+    outs:
+    - path: data/interim
+      hash: md5
+      md5: ef37afd17951ea8af23114b28d26f784.dir
+      size: 566210
+      nfiles: 2
+  feature_engineering:
+    cmd: python mlops_new/features/feature_engineering.py
+    deps:
+    - path: data/interim
+      hash: md5
+      md5: ef37afd17951ea8af23114b28d26f784.dir
+      size: 566210
+      nfiles: 2
+    - path: mlops_new/features/feature_engineering.py
+      hash: md5
+      md5: 30e853b86781d9a1c666cc44a1f94d72
+      size: 3768
+    params:
+      params.yaml:
+        feature_engineering.max_features: 100
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: accdec2100284971dd1422af43f346c0.dir
+      size: 4534613
+      nfiles: 2
+  model_building:
+    cmd: python mlops_new/modeling/train.py
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: accdec2100284971dd1422af43f346c0.dir
+      size: 4534613
+      nfiles: 2
+    - path: mlops_new/modeling/train.py
+      hash: md5
+      md5: 0858e685d1d87a4b3d2983b217ec41db
+      size: 3022
+    params:
+      params.yaml:
+        model_building.learning_rate: 0.1
+        model_building.n_estimators: 25
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: 1a9fa85380a6a7464ca08f2e33cb640e
+      size: 45096
+  model_evaluation:
+    cmd: python mlops_new/modeling/model_evaluation.py
+    deps:
+    - path: mlops_new/modeling/model_evaluation.py
+      hash: md5
+      md5: 88f6c6fd10349357462a7d1bda2abe48
+      size: 3330
+    - path: models/model.joblib
+      hash: md5
+      md5: 1a9fa85380a6a7464ca08f2e33cb640e
+      size: 45096
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 1876512b8ada2b01c5d4ed7a32fdcf25
+      size: 146
